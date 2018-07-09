@@ -12,7 +12,7 @@ Wzorcowy projekt stosowanych technologii. Lista to do, w późniejszych etapach 
 # Flow
 1. Propozycja funkcjonalności i przedyskutowanie jej
 2. Udokumentowanie w zavijava-docs/docs i oddanie do sprawdzenia
-3. Rozpisanie modyfikacji API w zavijava-docs/swagger.yaml i oddanie do sprawdzenia
+3. Rozpisanie modyfikacji API w zavijava-docs/openapi.yaml i oddanie do sprawdzenia
 4. Wprowadzenie modyfikacji i oddanie do sprawdzenia
 	1. W backendzie
 	2. We frontendzie

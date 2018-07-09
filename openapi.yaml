@@ -1,0 +1,206 @@
+openapi: '3.0.1'
+info:
+  title: Zavijava
+  version: '1.0'
+servers:
+  - url: https://api.zavijava.optize.pl/1.0
+paths:
+  /login:
+    post:
+      summary: Zalogowanie użytkownika
+      requestBody:
+        description: Formularz logowania
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/login'
+      responses:
+        200:
+          description: Zalogowanie zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/login'
+  /logout:
+    post:
+      summary: Wylogowanie użytkownika
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        202:
+          description: Wylogowanie zakończone sukcesem
+  /user:
+    post:
+      summary: Dodanie użytkownika
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        description: Formularz dodania użytkownika
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/userAdd'
+      responses:
+        200:
+          description: Dodanie użytkownika zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/userId'
+  /user/list:
+    post:
+      summary: Lista użytkowników
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        200:
+          description: Pobranie listy użytkowników zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/userList'
+  /user/{id}:
+    parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/token'
+    delete:
+      summary: Usunięcie użytkownika
+      responses:
+        202:
+          description: Usunięcie użytkownika zakończone sukcesem
+    get:
+      summary: Szczegóły użytkownika
+      responses:
+        200:
+          description: Pobranie szczegółów użytkownika zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/user'
+    put:
+      summary: Edycja użytkownika
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        description: Formularz edycji użytkownika
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/userEdit'
+      responses:
+        202:
+          description: Edycja użytkownika zakończona sukcesem
+components:
+  parameters:
+    userId:
+      name: id
+      in: path
+      description: Identyfikator użytkownika
+      required: true
+      schema:
+        type: integer
+    token:
+      name: token
+      in: header
+      description: Token zalogowanego użytkownika
+      required: true
+      schema:
+        type: string
+  responses:
+    login:
+      description: Token do autoryzacji zapytań
+      content:
+        application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+    user:
+      description: Szczegóły użytkownika
+      content:
+        application/json:
+              schema:
+                $ref: '#/components/schemas/userDetails'
+    userId:
+      description: Identyfikator użytkownika
+      content:
+        application/json:
+              schema:
+                $ref: '#/components/schemas/userId'
+    userList:
+      description: Lista użytkowników
+      content:
+        application/json:
+              schema:
+                $ref: '#/components/schemas/userList'
+  schemas:
+    login:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - password
+      example:
+        name: Otis Optize
+        password: qwerty123
+    userAdd:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - password
+      example:
+        name: Otis Optize
+        password: qwerty123
+    userDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
+      example:
+        id: 1
+        name: Otis Optize
+    userEdit:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+      example:
+        name: Otis Optize
+        password: qwerty123
+    userId:
+      type: object
+      properties:
+        id:
+          type: integer
+      example:
+        id: 1
+    userList:
+      type: array
+      items:
+        $ref: '#/components/schemas/userDetails'
+    token:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+      example:
+        token: 1d5505ddc59218a10b92de8c75eb0932
