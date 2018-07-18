@@ -30,6 +30,67 @@ paths:
       responses:
         '202':
           description: Wylogowanie zakończone sukcesem
+  /task:
+    post:
+      summary: Dodanie zadania
+      parameters:
+        - $ref: '#/components/parameters/token'
+      requestBody:
+        description: Formularz dodania zadania
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/taskAdd'
+      responses:
+        '200':
+          description: Dodanie zadania zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/taskId'
+  /task/list:
+    get:
+      summary: Lista zadań
+      parameters:
+        - $ref: '#/components/parameters/token'
+      responses:
+        '200':
+          description: Pobranie listy zadań zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/taskList'
+  /task/{id}:
+    parameters:
+      - $ref: '#/components/parameters/taskId'
+      - $ref: '#/components/parameters/token'
+    delete:
+      summary: Usunięcie zadania
+      responses:
+        '202':
+          description: Usunięcie zadania zakończone sukcesem
+    get:
+      summary: Szczegóły zadania
+      responses:
+        '200':
+          description: Pobranie szczegółów zadania zakończone sukcesem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/task'
+    put:
+      summary: Edycja zadania
+      requestBody:
+        description: Formularz edycji zadania
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/taskEdit'
+      responses:
+        '202':
+          description: Edycja zadania zakończona sukcesem
   /user:
     post:
       summary: Dodanie użytkownika
@@ -50,7 +111,7 @@ paths:
               schema:
                 $ref: '#/components/responses/userId'
   /user/list:
-    post:
+    get:
       summary: Lista użytkowników
       parameters:
         - $ref: '#/components/parameters/token'
@@ -95,6 +156,14 @@ paths:
           description: Edycja użytkownika zakończona sukcesem
 components:
   parameters:
+    taskId:
+      name: id
+      in: path
+      description: Identyfikator zadania
+      required: true
+      schema:
+        type: integer
+        format: int64
     userId:
       name: id
       in: path
@@ -117,18 +186,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/token'
+    task:
+      description: Szczegóły zadania
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/taskDetails'
     user:
       description: Szczegóły użytkownika
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/userDetails'
+    taskId:
+      description: Identyfikator zadania
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/id'
     userId:
       description: Identyfikator użytkownika
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/userId'
+            $ref: '#/components/schemas/id'
+    taskList:
+      description: Lista zadań
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/taskList'
     userList:
       description: Lista użytkowników
       content:
@@ -136,6 +223,14 @@ components:
           schema:
             $ref: '#/components/schemas/userList'
   schemas:
+    id:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+      example:
+        id: 1
     login:
       type: object
       properties:
@@ -150,6 +245,105 @@ components:
       example:
         name: Otis Optize
         password: qwerty123
+    taskAdd:
+      type: object
+      properties:
+        name:
+          description: Nazwa zadania
+          type: string
+        startDate:
+          description: Data rozpoczęcia realizacji zadania
+          type: string
+          format: date-time
+        endDate:
+          description: Data zakończenia realizacji zadania
+          type: string
+          format: date-time
+      required:
+      - name
+    taskDetails:
+      type: object
+      properties:
+        id:
+          description: Identyfikator zadania w bazie danych
+          type: integer
+          format: int64
+        name:
+          description: Nazwa zadania
+          type: string
+        status:
+          description: >
+            Status zadania:
+              * `0` - Do zrobienia
+              * `1` - W trakcie robienia
+              * `2` - Do sprawdzenia
+              * `3` - W trakcie sprawdzania
+              * `4` - Do poprawienia
+              * `5` - W trakcie poprawiania
+              * `6` - Sprawdzone
+              * `7` - Zrobione bez sprawdzenia
+          type: integer
+          format: int32
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+        startDate:
+          description: Data rozpoczęcia realizacji zadania
+          type: string
+          format: date-time
+        endDate:
+          description: Data zakończenia realizacji zadania
+          type: string
+          format: date-time
+      required:
+      - name
+      - status
+    taskEdit:
+      type: object
+      properties:
+        name:
+          description: Nazwa zadania
+          type: string
+        status:
+          description: >
+            Status zadania:
+              * `0` - Do zrobienia
+              * `1` - W trakcie robienia
+              * `2` - Do sprawdzenia
+              * `3` - W trakcie sprawdzania
+              * `4` - Do poprawienia
+              * `5` - W trakcie poprawiania
+              * `6` - Sprawdzone
+              * `7` - Zrobione bez sprawdzenia
+          type: integer
+          format: int32
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+            - 6
+            - 7
+        startDate:
+          description: Data rozpoczęcia realizacji zadania
+          type: string
+          format: date-time
+        endDate:
+          description: Data zakończenia realizacji zadania
+          type: string
+          format: date-time
+    taskList:
+      type: array
+      items:
+        $ref: '#/components/schemas/taskDetails'
     userAdd:
       type: object
       properties:
@@ -189,14 +383,6 @@ components:
       example:
         name: Otis Optize
         password: qwerty123
-    userId:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-      example:
-        id: 1
     userList:
       type: array
       items:
