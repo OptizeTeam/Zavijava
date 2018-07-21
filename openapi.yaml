@@ -3,7 +3,7 @@ info:
   title: Zavijava
   version: '1.0'
 servers:
-  - url: 'https://api.zavijava.optize.pl/1.0'
+  - url: https://api.zavijava.optize.pl/1.0
 paths:
   /login:
     post:
