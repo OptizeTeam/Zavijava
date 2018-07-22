@@ -3,11 +3,12 @@ Wzorcowy projekt stosowanych technologii. Lista to do, w późniejszych etapach 
 
 # Stosowane technologie
 * Backend:
+	* Express 4.16.x
 	* Symfony 4.1.x
 * Frontend:
 	* Angular.js 1.7.x
 * Dokumentacja:
-	* Swagger 3.0.x
+	* OpenAPI 3.0.x
 
 # Flow
 1. Propozycja funkcjonalności i przedyskutowanie jej

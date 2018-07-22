@@ -3,7 +3,7 @@ info:
   title: Zavijava
   version: '1.0'
 servers:
-  - url: 'https://api.zavijava.optize.pl/1.0'
+  - url: https://api.zavijava.optize.pl/1.0
 paths:
   /login:
     post:
@@ -396,4 +396,3 @@ components:
         - token
       example:
         token: 1d5505ddc59218a10b92de8c75eb0932
-
